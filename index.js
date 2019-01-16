@@ -1,25 +1,31 @@
-import { createFilter } from 'rollup-pluginutils';
+'use strict';
 
-export default function string(opts = {}) {
+var rollupPluginutils = require('rollup-pluginutils');
+
+function string(opts) {
+	if ( opts === void 0 ) opts = {};
+
 	if (!opts.include) {
 		throw Error('include option should be specified');
 	}
 
-	const filter = createFilter(opts.include, opts.exclude);
+	var filter = rollupPluginutils.createFilter(opts.include, opts.exclude);
 
 	return {
 		name: 'string',
 
-		transform(code, id) {
+		transform: function transform(code, id) {
 			if (filter(id)) {
 				if (code.startsWith("module.exports =")){
 					code = code.substr(16);
 				}
 				return {
-					code: `export default ${code};`,
+					code: ("export default " + code + ";"),
 					map: { mappings: '' }
 				};
 			}
 		}
 	};
 }
+
+module.exports = string;
