@@ -12,8 +12,11 @@ export default function string(opts = {}) {
 
 		transform(code, id) {
 			if (filter(id)) {
+				if (code.startsWith("module.exports =")){
+					code = code.substr(16);
+				}
 				return {
-					code: `export default ${JSON.stringify(code)};`,
+					code: `export default ${code};`,
 					map: { mappings: '' }
 				};
 			}
